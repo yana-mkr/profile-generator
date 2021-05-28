@@ -1,32 +1,11 @@
 const fs = require('fs');
-const path = require('fs');
+const path = require('path');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const generate = require('./src/generate');
+const generateHTML = require('./src/generate');
 const inquirer = require('inquirer')
 const team = [];
-
-// function nextEmployee() {
-//     inquirer
-//         .prompt({
-//             type: 'list',
-//             name: 'choices',
-//             message: 'Would you like to create another employee, or finish?',
-//             choices: ['Engineer', 'Intern', 'Finish'],
-//             default: 'Finish'
-//         }).then(
-
-//             function addNew() {
-//                 if (choices === 'Engineer') {
-//                     getEngineer()
-//                 } else if (choices === 'Intern') {
-//                     getIntern()
-//                 } else {
-//                     writeToFile()
-//                 }
-//             })
-// }
 
 function getManager() {
     inquirer
@@ -55,9 +34,33 @@ function getManager() {
         .then((data) => {
             const manager = new Manager(data.managerName, data.managerId, data.managerEmail, data.office)
             team.push(manager);
-        })
+        }).then((data) => {
+            nextEmployee('y');
+        });
+}
 
-    nextEmployee()
+function nextEmployee(data) {
+    if (!data.length) {
+        //generateHTML()
+        return;
+    }
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'choices',
+            message: 'Would you like to create another employee, or finish?',
+            choices: ['Engineer', 'Intern', 'Finish'],
+            default: 'Finish'
+        }).then((data) => {
+            //console.log(data);
+            if (data.choices === 'Engineer') {
+                getEngineer();
+            } else if (data.choices === 'Intern') {
+                getIntern();
+            } else {
+                writeToFile();
+            }
+        });
 }
 
 function getEngineer() {
@@ -87,9 +90,9 @@ function getEngineer() {
         .then((data) => {
             const engineer = new Engineer(data.engineerName, data.engineerId, data.engineerEmail, data.github)
             team.push(engineer);
-        })
-
-    nextEmployee()
+        }).then((data) => {
+            nextEmployee('y');
+        });
 }
 
 function getIntern() {
@@ -119,22 +122,21 @@ function getIntern() {
         .then((data) => {
             const intern = new Intern(data.internName, data.internId, data.internEmail, data.school)
             team.push(intern);
-        })
+        }).then((data) => {
 
-    nextEmployee()
+            nextEmployee('y');
+        });
 }
 
-function writeToFile(fileName, data) {
-    fs.writeFile(path.join(__dirname, 'dist', fileName), data, err => {
+function writeToFile() {
+    fs.writeFile(path.join(__dirname, 'dist', 'team.html'), generateHTML(team), 'utf-8', err => {
         console.log(err)
     });
 }
 
-function init(answers) {
-    generate('team.html', generateHTML(answers))
-    console.log("The file was written!")
-}
+// function generateHTML(answers) {
+//     generate.generateHTML('team.html', answers)
+//     console.log("The file was written!")
+// }
 
 getManager();
-
-// module.exports = { getManager, getEngineer, getIntern, writeFile, init }

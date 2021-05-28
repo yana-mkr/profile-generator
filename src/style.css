@@ -1,0 +1,37 @@
+h1 {
+    text-align: center;
+    background-color:thistle;
+    padding: 100px 0 100px 0;
+    color: whitesmoke;
+    margin-bottom: 100px;
+    text-shadow: 2px 2px 4px #bc8f8f;
+}
+
+h5 {
+    padding:20px;
+    font-size: 40px;
+}
+
+h6 {
+    padding: 10px;
+    font-size: 25px;
+}
+
+.card {
+    border-radius: 50px;
+    box-shadow: 2px 2px 4px #D8BFD8;
+}
+
+a {
+    text-decoration: none;
+    color: #D8BFD8;
+    font-size: 20px;
+}
+
+a:hover {
+    color:rosybrown;
+}
+
+.list-group-item {
+    font-size: 20px;
+}
